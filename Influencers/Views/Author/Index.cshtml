@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Influencers.BusinessLogic.ViewModels.AuthorViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{ var i = 0;}
+@foreach (var author in Model)
+{
+    i++;
+    <div class="author-ranking">
+        <div class="author-position">@i.</div>
+        @if (author.ImageSource!= null)
+        {
+            <img class="rounded-circle" src="~/AuthorImage/@author.ImageSource " style="height: 30px; width: 30px;" />
+        }
+        else
+        {
+            <img class="rounded-circle" src="~/AuthorImage/emptyProfile.png" style="height: 30px; width: 30px;" />
+        }
+        <a asp-action="Details" asp-route-id="@author.Id" style="color: #5F4B8BFF; margin-left: 7px;">@author.FirstName @author.LastName</a>
+        <div class="author-votes">@author.Votes</div>
+    </div>
+}

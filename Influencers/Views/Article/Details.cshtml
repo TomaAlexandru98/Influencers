@@ -1,0 +1,174 @@
+﻿@model Influencers.BusinessLogic.ViewModels.DetailsArticleViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="article-container">
+    <div class="article-image">
+        @if (Model.CurrentArticle.ImageSource == null)
+        {
+            <img src="~/ArticleImage/index.png" style="width: 220px; height: 220px;" />
+        }
+        else
+        {
+            <img src="~/ArticleImage/@Model.CurrentArticle.ImageSource" style="width: 220px; height: 220px;" />
+        }
+    </div>
+    <div class="article-content">
+        <div class="article-header">
+            <span class="article-title"><a>@Model.CurrentArticle.Title</a></span>
+            <a data-target="#editArticleModal" data-toggle="modal" onclick="sendEmail('@Model.CurrentArticle.Id')">
+                <i id="edit-icon" class="fa fa-edit" style="float: right; margin-left: 10px; margin-top: 0.5rem; cursor: pointer;"></i>
+            </a>
+            <partial name="_Rating" model="@Model.CurrentArticle" />
+        </div>
+        <div class="article-author-date">
+            @if (Model.CurrentArticle.ImageAuthorSource != null)
+            {
+                <img src="~/AuthorImage/@Model.CurrentArticle.ImageAuthorSource" class="rounded-circle" style="width: 35px; height: 35px;" />
+            }
+            else
+            {
+                <img src="~/AuthorImage/emptyProfile.png" class="rounded-circle" style="width: 35px; height: 35px;" />
+            }
+            <span>
+                <a asp-controller="Author" asp-action="Details" asp-route-id="@Model.CurrentArticle.AuthorId">
+                    @Model.CurrentArticle.FirstName @Model.CurrentArticle.LastName
+                </a>
+            </span>
+            <span>|</span>
+            <span>@Model.CurrentArticle.Date.Value.ToLongDateString()</span>
+        </div>
+        <div class="article-content">@Model.CurrentArticle.Content</div>
+        <div style="width: 80%;">
+            <div class="line-content-tags"></div>
+            <div>
+                <span style="font-size: 1.3rem; margin-bottom: 1.5rem;">Posted in</span>
+                <span>
+                    @foreach (var tag in Model.CurrentArticle.Tags)
+                    {
+                        <span class="article-tag"><a asp-action="FilterAfterTag" asp-route-id="@tag.Id">@tag.Name</a></span>
+                    }
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="width: 90%; margin: auto;" id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div style="width: 90%; margin-left: 6.7rem;">
+            <div class="carousel-item active">
+                <div class="row">
+                    @{ var numberOfArticlesPerSlide = 3;
+                        var numberOfSlides = 1;}
+                    @if (Model.RelatedArticles.Count() >= numberOfArticlesPerSlide * numberOfSlides)
+                    {
+                        @for (var i = 0; i < numberOfArticlesPerSlide; i++)
+                        {
+                            <span class="article-related-container">
+                                <div style="font-size: 1.3rem; margin-bottom: 0.6rem;">
+                                    <a style="color: #5F4B8BFF;" asp-action="Details" asp-route-id="@Model.RelatedArticles.ElementAt(i).Id">
+                                        @Model.RelatedArticles.ElementAt(i).Title
+                                    </a>
+                                </div>
+                                <div style="font-size: 0.8rem;">@Model.RelatedArticles.ElementAt(i).Content</div>
+                            </span>
+                        }
+                    }
+                </div>
+            </div>
+            @{ numberOfSlides++;}
+            @while (Model.RelatedArticles.Count() >= numberOfArticlesPerSlide * numberOfSlides)
+            {
+                <div class="carousel-item">
+                    <div class="row">
+                        @for (var i = numberOfArticlesPerSlide * (numberOfSlides - 1); i < numberOfArticlesPerSlide * numberOfSlides; i++)
+                        {
+                        <span class="article-related-container">
+                            <div style="font-size: 1.3rem; margin-bottom: 0.6rem;">
+                                <a style="color: #5F4B8BFF;" asp-action="Details" asp-route-id="@Model.RelatedArticles.ElementAt(i).Id">
+                                    @Model.RelatedArticles.ElementAt(i).Title
+                                </a>
+                            </div>
+                            <div style="font-size: 0.8rem;">@Model.RelatedArticles.ElementAt(i).Content</div>
+                        </span>
+                        }
+                    </div>
+                </div>
+                numberOfSlides++;
+            }
+        </div>
+    </div>
+    @if (Model.RelatedArticles.Count() > 3)
+    {
+        <a id="angleLeftButton" style="width: 100px;" class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <i id="angleLeft" class="fa fa-angle-left" style="font-size: 2rem; color: black; color: #5F4B8BFF;"></i>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a id="angleRightButton" style="width: 100px;" class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <i id="angleRight" class="fa fa-angle-right" style="font-size: 2rem; color: #5F4B8BFF;"></i>
+            <span class="sr-only">Next</span>
+        </a>
+    }
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="editArticleModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Email Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Influencers sent you an email in order to edit your article.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn publish-button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script>
+        $(document).ready(function () {
+            var timeToPassToGetView = "@Model.CurrentArticle.Content.Length" * 25;
+            setInterval(sendView(), timeToPassToGetView);
+            configRating(@Model.CurrentArticle.Id);
+        })
+
+        function sendEmail(articleId) {
+            $.ajax({
+                url: "/Article/SendEmail?id=" + articleId
+            });
+        }
+
+        $("#angleLeft").on("mouseover", function () {
+            $("#angleLeft").css("color", "#E69A8DFF");
+        });
+
+        $("#angleLeft").on("mouseout", function () {
+            $("#angleLeft").css("color", "#5F4B8BFF");
+        });
+
+        $("#angleRightButton").on("mouseover", function () {
+            $("#angleRight").css("color", "#E69A8DFF");
+        });
+
+        $("#angleRightButton").on("mouseout", function () {
+            $("#angleRight").css("color", "#5F4B8BFF");
+        });
+
+        function sendView() {
+            $.ajax({
+                url: "/Article/SendView?id=" + "@Model.CurrentArticle.Id",
+            });
+        }
+    </script>
+}

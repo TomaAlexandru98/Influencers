@@ -1,0 +1,64 @@
+﻿@model Influencers.BusinessLogic.ViewModels.EditArticleViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<h3 class="mb-3">Edit article "@Model.Title"</h3>
+
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group d-flex flex-column">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex flex-column">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea asp-for="Content" class="form-control" style="height: 15rem;"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArticleTags" class="control-label"></label>
+                <div id="tagsContainer" style="display: flex;">
+                    <input list="tags" id="nameTag" class="form-control" style="margin-right: 1rem;" />
+                    <input id="addTagButton" class="btn publish-button" value="Add Tag" style="width: 6rem; cursor: pointer;" />
+                    <datalist id="tags"></datalist>
+                </div>
+                <ul id="ulTags" style="margin-top: 1rem;"></ul>
+                <div id="tagIsNull" style="display: none; color: red;">Tag must have a name</div>
+                <div id="tagIsAlreadyAdded" style="display: none; color: red;"></div>
+                <span asp-validation-for="ArticleTags" class="text-danger"></span>
+            </div>
+            <input id="arrayTags" type="hidden" asp-for="ArticleTags" />
+            <input type="hidden" asp-for="TagsDb" />
+            <input id="editButton" type="submit" class="btn publish-button" value="Edit" />
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var tags = [];
+        $(document).ready(function () {
+            @foreach (var tag in Model.TagsDb)
+            {
+                @: addOptionDataList("@tag");
+            }
+
+            createTagElementsFromArray("@Model.ArticleTags");
+        });
+
+        $("#editButton").on("click", function () {
+            $("#arrayTags").val(tags);
+        });
+
+        $("#addTagButton").on("click", function () {
+            let tag = $("#nameTag").val();
+            addTag(tag);
+        });
+    </script>
+}

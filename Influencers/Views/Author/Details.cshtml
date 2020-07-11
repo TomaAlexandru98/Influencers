@@ -1,0 +1,78 @@
+﻿@model Influencers.BusinessLogic.ViewModels.DetailsAuthorViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="article-container mt-5" style="height: 20rem;">
+    <div class="col-8">
+        <span style="font-size: 2rem;">@Model.FirstName @Model.LastName</span>
+        <a data-target="#editAuthorModal" data-toggle="modal" onclick="sendAuthorEmail('@Model.Id')">
+            <i id="edit-author-icon" class="fa fa-edit" style="margin-left: 5px; cursor: pointer;"></i>
+        </a>
+        <div class="mt-2">@Model.Description</div>
+    </div>
+    <div class="col-4">
+        @if (Model.ImageSource != null)
+        {
+            <img src="~/AuthorImage/@Model.ImageSource" style="height: 16rem; width: 16rem;" />
+        }
+        else
+        {
+            <img src="~/AuthorImage/emptyProfile.png" style="height: 16rem; width: 16rem;" />
+        }
+    </div>
+</div>
+<h2 class="posted-by-this-author">Posted by this author</h2>
+<partial name="~/Views/Article/_ArticlesList.cshtml" model="@Model.Articles" />
+
+<div class="modal" tabindex="-1" role="dialog" id="editAuthorModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Email Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Influencers sent you an email in order to edit your personal information.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn publish-button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script>
+        $(".author-name").css("display", "none");
+
+        $(document).ready(function () {
+            setRatingForArticles();
+        });
+
+        function setRatingForArticles() {
+            @foreach (var article in Model.Articles)
+            {
+                @: configRating(@article.Id);
+            }
+        }
+
+        function sendEmail(articleId) {
+            $.ajax({
+                url: "/Article/SendEmail?id=" + articleId
+            });
+        }
+
+        function sendAuthorEmail(authorId) {
+            $.ajax({
+                url: "/Author/SendEmail?id=" + authorId
+            });
+        }
+    </script>
+}

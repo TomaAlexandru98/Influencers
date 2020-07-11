@@ -1,0 +1,101 @@
+﻿@model Influencers.BusinessLogic.VIewModels.CreateArticleViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<h3 class="mb-3">Create your article now</h3>
+
+<div class="row">
+    <div class="col-md-9">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group d-flex flex-column">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group d-flex flex-column">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea asp-for="Content" class="form-control" style="height: 15rem;"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ArticleTags" class="control-label"></label>
+                <div id="tagsContainer" style="display: flex;">
+                    <input list="tags" id="nameTag" class="form-control" style="margin-right: 1rem;" />
+                    <input id="addTagButton" class="btn publish-button" value="Add Tag" style="width: 6rem; cursor: pointer;" />
+                    <datalist id="tags"></datalist>
+                </div>
+                <ul id="ulTags" style="margin-top: 1rem;"></ul>
+                <div id="tagIsNull" style="display: none; color: red;">Tag must have a name</div>
+                <div id="tagIsAlreadyAdded" style="display: none; color: red;"></div>
+                <span asp-validation-for="ArticleTags" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div id="createAccountMessage" class="mt-3 mb-3" style="display: none; color: red;">Create an account in order to publish articles</div>
+            <div id="firstNameAuthor" class="form-group" style="display: none;">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div id="lastNameAuthor" class="form-group" style="display: none;">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="DoesAuthorExist" value="@Model.DoesAuthorExist" />
+            <input id="arrayTags" type="hidden" asp-for="ArticleTags" />
+            <input type="hidden" asp-for="TagsDb" />
+            <input id="publishButton" type="submit" class="btn publish-button" value="Publish" />
+        </form>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        var tags = [];
+        $(document).ready(function () {
+            @if (Model.DoesAuthorExist == false)
+             {
+                @:$("#firstNameAuthor").css("display", "block");
+                @:$("#lastNameAuthor").css("display", "block");
+                @:$("#createAccountMessage").css("display", "block");
+             }
+
+            @foreach (var tag in Model.TagsDb)
+            {
+                @: addOptionDataList("#tags", "@tag");
+            }
+
+            createTagElementsFromArray("@Model.ArticleTags");
+        });
+
+        $("#publishButton").on("click", function () {
+            $("#arrayTags").val(tags);
+        });
+
+        $("#addTagButton").on("click", function () {
+            let tag = $("#nameTag").val();
+            addTag(tag);
+        });
+    </script>
+}

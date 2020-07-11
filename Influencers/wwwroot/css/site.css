@@ -1,0 +1,268 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+:root {
+    --main-color: #5F4B8BFF;
+    --hover-color: #E69A8DFF;
+}
+
+nav {
+    background: #5F4B8BFF;
+}
+
+nav a{
+    color: white;
+}
+
+    nav a:hover {
+        color: #E69A8DFF;
+    }
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+.posted-by-this-author {
+    margin-left: 10rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #5F4B8BFF, #E69A8DFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.article-related-container {
+    width: 15rem;
+    height: 16rem;
+    margin: 0 1rem;
+    border-radius: 0.8rem;
+    border: .0625rem solid var(--main-color);
+    background: white;
+    color: var(--main-color);
+    padding: 2rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.article-container {
+    display: flex;
+    width: 55rem;
+    min-height: 5rem;
+    margin: auto;
+    margin-bottom: 2rem;
+    border-radius: 0.8rem;
+    border: .0625rem solid var(--main-color);
+    background: white;
+    color: var(--main-color);
+    padding: 2rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.author-ranking {
+    display: flex;
+    margin: auto;
+    border-radius: 0.8rem;
+    border: .0625rem solid var(--main-color);
+    background: white;
+    color: var(--main-color);
+    padding: 1rem 4rem;
+    width: 30rem;
+}
+
+.author-votes{
+    margin-left: auto;
+    float: right;
+}
+
+.author-position{
+    margin-right: 1rem;
+}
+
+.article-container:hover {
+    background: #f2f2f2;
+}
+
+.article-content{
+    width: 70%;
+}
+
+.article-image{
+    width: 30%;
+    height: 90%;
+    margin-right: 3rem;
+}
+
+.line-content-tags {
+    border-top: 1px solid var(--main-color);
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.article-tag{
+    padding: 0.5rem;
+    background: var(--main-color);
+    margin: 0 0.7rem 1.5rem 0;
+    cursor: pointer;
+}
+
+.article-tag a{
+    color: white;
+    text-decoration: none;
+}
+
+.article-tag:hover{
+    background: var(--hover-color);
+}
+
+.article-rating {
+    float: right;
+    margin-top: 0.5rem;
+}
+
+
+.article-rating span {
+    cursor: pointer;
+    animation: animation-star 0.5s ease-in;
+}
+
+.article-rating span:nth-child(1){
+    animation-delay: 50ms;
+
+}
+
+    .article-rating span:nth-child(2) {
+        animation-delay: 100ms;
+    }
+
+    .article-rating span:nth-child(3) {
+        animation-delay: 150ms;
+    }
+
+    .article-rating span:nth-child(4) {
+        animation-delay: 200ms;
+    }
+
+    .article-rating span:nth-child(5) {
+        animation-delay: 250ms;
+    }
+
+@keyframes animation-star{
+    0%{
+        opacity: 0;
+        transform: translateY(-50px);
+        filter: hue-rotate(180deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+        filter: hue-rotate(0deg);
+    }
+}
+
+.article-image img {
+    width: 100%;
+    height: 100%;
+}
+
+.article-title{
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+.article-title a {
+    color: var(--main-color);
+}
+
+.article-author-date{
+    margin-bottom: 1.3rem;
+}
+
+.article-author-date a {
+    cursor: pointer;
+}
+
+.btn-search {
+    color: white;
+    border: .0625rem solid white;
+    border-radius: 0.5rem;
+    margin-left: 0.3rem;
+}
+
+    .btn-search:hover {
+        color: #5F4B8BFF;
+        background: white;
+    }
+
+.publish-button{
+    background: var(--main-color);
+    color: white;
+}
+
+.publish-button:hover{
+    background: var(--hover-color);
+    color: white;
+}

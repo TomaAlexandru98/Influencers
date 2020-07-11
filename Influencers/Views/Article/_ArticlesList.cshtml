@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Influencers.BusinessLogic.VIewModels.ArticleViewModel>
+
+@if (!Model.Any())
+{
+    <h1 style="color:#5F4B8BFF;">No results found!</h1>
+}
+else
+{
+    @foreach (var article in Model)
+    {
+        <div class="article-container">
+            <div class="article-image">
+                @if (article.ImageSource == null)
+                {
+                    <img src="~/ArticleImage/index.png" style="width: 220px; height: 220px;"/>
+                }
+                else
+                {
+                    <img src="~/ArticleImage/@article.ImageSource" style="width: 220px; height: 220px;"/>
+                }
+            </div>
+            <div class="article-content">
+                <div class="article-header">
+                    <span class="article-title">
+                        <a asp-controller="Article" asp-action="Details" asp-route-id="@article.Id">@article.Title</a>
+                    </span>
+                    <a data-target="#editArticleModal" data-toggle="modal" onclick="sendEmail('@article.Id')">
+                        <i id="edit-icon" class="fa fa-edit" style="float: right; margin-left: 10px; margin-top: 0.5rem; cursor: pointer;"></i>
+                    </a>
+                    <partial name="~/Views/Article/_Rating.cshtml" model="@article" />
+                </div>
+                <div class="article-author-date">
+                    <span class="author-name">
+                        @if (article.ImageAuthorSource != null)
+                        {
+                            <img src="~/AuthorImage/@article.ImageAuthorSource" class="rounded-circle" style="width: 35px; height: 35px;" />
+                        }
+                        else
+                        {
+                            <img src="~/AuthorImage/emptyProfile.png" class="rounded-circle" style="width: 35px; height: 35px;" />
+                        }
+                        <span><a asp-controller="Author" asp-action="Details" asp-route-id="@article.AuthorId">@article.FirstName @article.LastName</a></span>
+                        <span>|</span>
+                    </span>
+                    <span>@article.Date.Value.ToLongDateString()</span>
+                </div>
+                <div class="article-content">@article.Content</div>
+            </div>
+        </div>
+    }
+}
+
+<div class="modal" tabindex="-1" role="dialog" id="editArticleModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Email Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Influencers sent you an email in order to edit your article.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn publish-button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

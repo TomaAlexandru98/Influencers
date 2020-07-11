@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Influencers.BusinessLogic.VIewModels.ArticleViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<partial name="_ArticlesList" model="@Model"/>
+
+@section scripts{
+    <script src="~/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script>
+        $(document).ready(function () {
+            setRatingForArticles();
+        });
+
+        function setRatingForArticles() {
+            @foreach (var article in Model)
+            {
+                @: configRating(@article.Id);
+            }
+        }
+
+        function sendEmail(articleId) {
+            $.ajax({
+                url: "/Article/SendEmail?id=" + articleId
+            });
+        }
+
+        $(window).scroll(function () {
+            if (Math.trunc($(window).scrollTop()) == $(document).height() - $(window).height()) {
+            }
+        });
+    </script>
+}
